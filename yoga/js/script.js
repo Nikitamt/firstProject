@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
   // Timer
 
-  let deadline = '2023-10-31';
+  let deadline = '2023-11-25';
 
   function getTimeRemaining(endtime) {
     let t = Date.parse(endtime) - Date.parse(new Date());
@@ -84,4 +84,29 @@ window.addEventListener('DOMContentLoaded', function() {
 
   setClock('timer', deadline);
   
+  // Modal
+
+  let buttonsMore = document.getElementsByClassName('description-btn'), 
+  more = document.querySelector('.more'),
+  overlay = document.querySelector('.overlay'),
+  close = document.querySelector('.popup-close');
+
+  addListener(more);
+  for (let elem of buttonsMore) {
+    addListener(elem);
+  }
+
+  function addListener(elem) {
+    elem.addEventListener('click', function() {
+      overlay.style.display = 'block';
+      this.classList.add('more-splash');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+
+  close.addEventListener('click', function() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  });
 })
