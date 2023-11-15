@@ -173,34 +173,96 @@ window.addEventListener('DOMContentLoaded', function () {
   sendForm(form);
   sendForm(formBottom);
 
-  // form.addEventListener('submit', function(event) {
-  //   event.preventDefault();
-  //   form.appendChild(statusMessage);
+  // Slider
 
-  //   let request = new XMLHttpRequest();
-  //   request.open('POST', 'server.php');
-  //   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  let slideIndex = 1,
+    slides = document.querySelectorAll('.slider-item'),
+    dotsWrap = document.querySelector('.slider-dots'),
+    dots = document.querySelectorAll('.dot'),
+    prev = document.querySelector('.prev'),
+    next = document.querySelector('.next');
 
-  //   let formData = new FormData(form);
-  //   let obj = {};
-  //   formData.forEach(function(value, key) {
-  //     obj[key] = value;
-  //   });
-  //   let json = JSON.stringify(obj);
-  //   request.send(json);
+  showSlides(1);
+  
+  function showSlides(n) {
 
-  //   request.addEventListener('readystatechange', function() {
-  //     if (request.readyState < 4) {
-  //       statusMessage.innerHTML = message.loading;
-  //     } else if (request.readyState === 4 && request.status === 200) {
-  //       statusMessage.innerHTML = message.success;
-  //     } else {
-  //       statusMessage.innerHTML = message.failure;
-  //     }
-  //   });
+    if (n < 1) {
+      slideIndex = slides.length;
+    } else if (n > slides.length) {
+      slideIndex = 1;
+    }
 
-  //   for (let i = 0; i < input.length; i++) {
-  //     input[i].value = '';
-  //   }
-  // })
+    slides.forEach((item) => item.style.display = 'none');
+    dots.forEach((item) => item.classList.remove('dot-active'));
+    slides[slideIndex - 1].style.display = 'block';
+    dots[slideIndex - 1].classList.add('dot-active');
+  }
+
+  function plusIndex(n) {
+    showSlides(slideIndex += n);
+  }
+
+  prev.addEventListener('click', function() {
+    plusIndex(-1);
+  });
+
+  next.addEventListener('click', function() {
+    plusIndex(1);
+  });
+
+  function currentSlide(index) {
+    showSlides(slideIndex = index);
+  }
+
+  dotsWrap.addEventListener('click', function(e) {
+    for (let i = 1; i <= dots.length; i++) {
+      if (e.target.classList.contains('dot') && e.target == dots[i - 1]) {
+        currentSlide(i);
+      }
+    }
+  })
+
+  // Calc
+
+  let persons = document.getElementsByClassName('counter-block-input')[0],
+    restDays = document.getElementsByClassName('counter-block-input')[1],
+    total = document.getElementById('total'),
+    place = document.getElementById('select'),
+    totalSum = 0,
+    countPersons = 0,
+    countDays = 0;
+
+  total.innerHTML = 0;
+
+  persons.addEventListener('input', function() {
+    countPersons = +this.value;
+
+    if (restDays.value == '' || this.value == '') {
+      total.innerHTML = 0;
+    } else {
+      totalSum = (countPersons + countDays) * 4000;
+      total.innerHTML = totalSum;
+    }
+    
+  });
+
+  restDays.addEventListener('input', function() {
+    countDays = +this.value;
+
+    if (persons.value == '' || this.value == '') {
+      total.innerHTML = 0;
+    } else {
+      totalSum = (countPersons + countDays) * 4000;
+      total.innerHTML = totalSum;
+    }
+  });
+
+  place.addEventListener('change', function() {
+    if (persons.value == '' || restDays.value == '') {
+      total.innerHTML = 0;
+    } else {
+      //let a = totalSum;
+      total.innerHTML = totalSum * this.options[this.selectedIndex].value;
+    }
+  });
 })
